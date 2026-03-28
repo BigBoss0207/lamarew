@@ -1,26 +1,108 @@
 @import "tailwindcss";
 
+/*
+  LAMARE Wedding & Party — brand palette (identity board)
+  - Rose Pink: 메인 포인트 · 테라코타 느낌의 더스티 로즈
+  - Rose Gold: 브론즈 → 코퍼 핑크 메탈 그라데이션
+  - Light Pink: 소프트 액센트
+  - White / Ivory: 베이스 & 카드
+*/
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --rose-pink: #c49590;
+  --light-pink: #f5e8e6;
+  --ivory: #f7f3ec;
+  --white: #ffffff;
+
+  /* Company-wide ocean colorways (navy / teal / rose) */
+  --ocean-navy: #1f3b73;
+  --ocean-teal: #78b7c6;
+  --ocean-rose: var(--rose-pink);
+
+  --rose-gold-from: #8b5e4a;
+  --rose-gold-to: #d4b5a8;
+  --rose-gold-mid: #b89688;
+
+  --background: var(--ivory);
+  --foreground: #3d2e2c;
+  --muted: #6b5b58;
+
+  --gold: var(--rose-gold-mid);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-muted: var(--muted);
+  --color-rose-pink: var(--rose-pink);
+  --color-light-pink: var(--light-pink);
+  --color-ivory: var(--ivory);
+  --color-white: var(--white);
+  --color-gold: var(--gold);
+  --color-ocean-navy: var(--ocean-navy);
+  --color-ocean-teal: var(--ocean-teal);
+  --color-ocean-rose: var(--ocean-rose);
+  --color-rose-gold-from: var(--rose-gold-from);
+  --color-rose-gold-to: var(--rose-gold-to);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  text-rendering: geometricPrecision;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif), ui-serif, Georgia, serif;
+}
+
+/* 로즈 골드 메탈 액센트 (단색 대신 그라데이션) */
+.bg-brand-rose-gold {
+  background-image: linear-gradient(
+    90deg,
+    var(--rose-gold-from),
+    var(--rose-gold-to)
+  );
+}
+
+/* Bright panoramic ocean (hero) */
+.bg-brand-panorama-ocean {
+  background-image:
+    /* sky sparkle */
+    radial-gradient(1000px 640px at 20% 8%, rgba(120, 183, 198, 0.62), transparent 60%),
+    radial-gradient(920px 560px at 78% 10%, rgba(31, 59, 115, 0.22), transparent 58%),
+    /* ocean band + gentle rose warmth (interior reflection) */
+    radial-gradient(1100px 520px at 50% 48%, rgba(120, 183, 198, 0.38), transparent 62%),
+    radial-gradient(760px 520px at 66% 82%, rgba(196, 149, 144, 0.10), transparent 58%),
+    /* horizon-to-ivory transition */
+    linear-gradient(180deg, #e6f7ff 0%, #cfeffb 26%, #f7f3ec 78%, #f7f3ec 100%);
+}
+
+/* Airy window-like grid (very subtle) */
+.bg-brand-panorama-grid {
+  background-image:
+    linear-gradient(to right, rgba(31, 59, 115, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(120, 183, 198, 0.08) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(circle at 55% 24%, black 0%, black 45%, transparent 72%);
+}
+
+/* Hero text frame softly breathes with photo changes */
+@keyframes hero-frame-breathe {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  8%,
+  92% {
+    opacity: 1;
+  }
+}
+
+.animate-hero-frame-breathe {
+  animation: hero-frame-breathe 5s linear infinite;
 }
