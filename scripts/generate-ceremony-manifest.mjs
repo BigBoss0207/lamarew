@@ -8,24 +8,43 @@ const publicDir = path.join(root, "public");
 const outDir = path.join(root, "src", "data");
 const outFile = path.join(outDir, "ceremony-gallery-manifest.ts");
 
-/** wedding1.JPG, wedding130.jpg 등 파일명에서 순번 추출 */
+/** wedding1.JPG 등 파일명에서 순번 추출 */
 function weddingIndex(name) {
   const m = name.match(/^wedding(\d+)\./i);
   return m ? Number(m[1]) : Number.POSITIVE_INFINITY;
 }
 
+/** 같은 번호에 여러 확장자가 있으면 웹 호환성이 좋은 순으로 하나만 씀 */
+function formatPriority(name) {
+  const n = name.toLowerCase();
+  if (/\.(jpe?g)$/.test(n)) return 0;
+  if (/\.png$/.test(n)) return 1;
+  if (/\.webp$/.test(n)) return 2;
+  if (/\.gif$/.test(n)) return 3;
+  if (/\.heic$/.test(n)) return 4;
+  return 99;
+}
+
 let files = [];
 try {
   const names = readdirSync(publicDir);
-  const imageExt = /\.(jpg|jpeg|png|webp|gif)$/i;
-  files = names
-    .filter(
-      (name) =>
-        /^wedding\d+\./i.test(name) &&
-        imageExt.test(name) &&
-        !/\.heic$/i.test(name),
-    )
-    .sort((a, b) => weddingIndex(a) - weddingIndex(b));
+  const extOk = /\.(jpe?g|png|webp|gif|heic)$/i;
+  const candidates = names.filter(
+    (name) => /^wedding\d+\./i.test(name) && extOk.test(name),
+  );
+  candidates.sort((a, b) => {
+    const ia = weddingIndex(a);
+    const ib = weddingIndex(b);
+    if (ia !== ib) return ia - ib;
+    return formatPriority(a) - formatPriority(b);
+  });
+  const seen = new Set();
+  for (const name of candidates) {
+    const i = weddingIndex(name);
+    if (seen.has(i)) continue;
+    seen.add(i);
+    files.push(name);
+  }
 } catch {
   files = [];
 }
