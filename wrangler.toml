@@ -1,0 +1,6 @@
+# Cloudflare Pages — Next on Pages 산출물 + Node 호환 플래그
+# name은 대시보드의 Pages 프로젝트 이름과 같아야 합니다. 다르면 여기만 수정하세요.
+name = "lamarew"
+pages_build_output_dir = ".vercel/output/static"
+compatibility_date = "2026-03-28"
+compatibility_flags = ["nodejs_compat"]
