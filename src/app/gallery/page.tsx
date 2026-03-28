@@ -24,7 +24,7 @@ type SearchParams = {
 function getCeremonyItems(): GalleryItem[] {
   return CEREMONY_GALLERY_FILENAMES.map((name, i) => ({
     title: `예식 ${String(i + 1).padStart(2, "0")}`,
-    src: `/${encodeURIComponent(name)}`,
+    src: `/${name}`,
   }));
 }
 
