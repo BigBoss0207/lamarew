@@ -1,8 +1,8 @@
-import { readdir } from "node:fs/promises";
-import path from "node:path";
-
 import { Container } from "@/components/container";
 import { GalleryCategorized } from "@/components/gallery-categorized";
+import { CEREMONY_GALLERY_FILENAMES } from "@/data/ceremony-gallery-manifest";
+
+export const runtime = "edge";
 
 export const metadata = {
   title: "Gallery",
@@ -21,21 +21,8 @@ type SearchParams = {
   dining?: string;
 };
 
-function getOrderFromName(name: string) {
-  const m = name.match(/\((\d+)\)/);
-  return m ? Number(m[1]) : Number.POSITIVE_INFINITY;
-}
-
-async function getCeremonyItems(): Promise<GalleryItem[]> {
-  const publicDir = path.join(process.cwd(), "public");
-  const files = await readdir(publicDir);
-  const imageExt = /\.(jpg|jpeg|png|webp|gif)$/i;
-
-  const ceremonyFiles = files
-    .filter((name) => name.includes("예식") && imageExt.test(name))
-    .sort((a, b) => getOrderFromName(a) - getOrderFromName(b));
-
-  return ceremonyFiles.map((name, i) => ({
+function getCeremonyItems(): GalleryItem[] {
+  return CEREMONY_GALLERY_FILENAMES.map((name, i) => ({
     title: `예식 ${String(i + 1).padStart(2, "0")}`,
     src: `/${encodeURIComponent(name)}`,
   }));
@@ -62,7 +49,7 @@ export default async function GalleryPage({
   const params = await searchParams;
   const initialTopCategory = normalizeTopCategory(params.category);
   const initialDiningCategory = normalizeDiningCategory(params.dining);
-  const ceremonyItems = await getCeremonyItems();
+  const ceremonyItems = getCeremonyItems();
 
   return (
     <div className="py-14 sm:py-20">
@@ -94,4 +81,3 @@ export default async function GalleryPage({
     </div>
   );
 }
-
