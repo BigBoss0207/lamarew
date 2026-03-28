@@ -8,8 +8,9 @@ const publicDir = path.join(root, "public");
 const outDir = path.join(root, "src", "data");
 const outFile = path.join(outDir, "ceremony-gallery-manifest.ts");
 
-function getOrderFromName(name) {
-  const m = name.match(/\((\d+)\)/);
+/** wedding1.JPG, wedding130.jpg 등 파일명에서 순번 추출 */
+function weddingIndex(name) {
+  const m = name.match(/^wedding(\d+)\./i);
   return m ? Number(m[1]) : Number.POSITIVE_INFINITY;
 }
 
@@ -20,11 +21,11 @@ try {
   files = names
     .filter(
       (name) =>
-        /^wedding\s*\(\d+\)\./i.test(name) &&
+        /^wedding\d+\./i.test(name) &&
         imageExt.test(name) &&
         !/\.heic$/i.test(name),
     )
-    .sort((a, b) => getOrderFromName(a) - getOrderFromName(b));
+    .sort((a, b) => weddingIndex(a) - weddingIndex(b));
 } catch {
   files = [];
 }
