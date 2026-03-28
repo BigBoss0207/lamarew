@@ -11,10 +11,10 @@ type Slide = {
 };
 
 const DEFAULT_SLIDES: Slide[] = [
-  { src: "/쉐어코스 (7).JPG", alt: "쉐어 코스 다이닝 이미지", tag: "SHARE COURSE" },
-  { src: "/쉐어코스 (3).JPG", alt: "쉐어 코스 다이닝 이미지", tag: "SHARE COURSE" },
-  { src: "/케이터링1.JPG", alt: "케이터링 다이닝 이미지", tag: "CATERING" },
-  { src: "/케이터링8.JPG", alt: "케이터링 다이닝 이미지", tag: "CATERING" },
+  { src: "/sharecorse7.JPG", alt: "쉐어 코스 다이닝 이미지", tag: "SHARE COURSE" },
+  { src: "/sharecorse3.JPG", alt: "쉐어 코스 다이닝 이미지", tag: "SHARE COURSE" },
+  { src: "/catering1.JPG", alt: "케이터링 다이닝 이미지", tag: "CATERING" },
+  { src: "/catering8.JPG", alt: "케이터링 다이닝 이미지", tag: "CATERING" },
 ];
 
 type Props = {

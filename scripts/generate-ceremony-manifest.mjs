@@ -18,7 +18,12 @@ try {
   const names = readdirSync(publicDir);
   const imageExt = /\.(jpg|jpeg|png|webp|gif)$/i;
   files = names
-    .filter((name) => name.includes("예식") && imageExt.test(name))
+    .filter(
+      (name) =>
+        /^wedding\s*\(\d+\)\./i.test(name) &&
+        imageExt.test(name) &&
+        !/\.heic$/i.test(name),
+    )
     .sort((a, b) => getOrderFromName(a) - getOrderFromName(b));
 } catch {
   files = [];

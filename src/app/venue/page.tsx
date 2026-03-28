@@ -20,12 +20,12 @@ const venueGalleryItems = [
   { title: "Floral Moment", src: "/ocean2.jpg" },
   { title: "Signature Scene", src: "/ocean3.jpg" },
   { title: "Final Touch", src: "/ocean4.jpg" },
-  { title: "루프탑 07", src: "/루프탑 (7).jpg" },
-  { title: "루프탑 02", src: "/루프탑 (2).jpg" },
-  { title: "루프탑 06", src: "/루프탑 (6).jpg" },
-  { title: "루프탑 04", src: "/루프탑 (4).jpg" },
-  { title: "루프탑 09", src: "/루프탑 (9).jpg" },
-  { title: "루프탑 01", src: "/루프탑 (1).jpg" },
+  { title: "루프탑 07", src: "/rooftop7.jpg" },
+  { title: "루프탑 02", src: "/rooftop2.jpg" },
+  { title: "루프탑 06", src: "/rooftop6.jpg" },
+  { title: "루프탑 04", src: "/rooftop4.jpg" },
+  { title: "루프탑 09", src: "/rooftop9.jpg" },
+  { title: "루프탑 01", src: "/rooftop1.jpg" },
 ];
 
 export default function VenuePage() {
