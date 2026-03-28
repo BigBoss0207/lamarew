@@ -1,9 +1,9 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Camera, MapPin, MessageCircle, Phone } from "lucide-react";
 
 import { Container } from "@/components/container";
 import { FooterAddressCopy } from "@/components/footer-address-copy";
+import { publicFileUrl } from "@/lib/public-file-url";
 
 export function SiteFooter() {
   return (
@@ -13,13 +13,11 @@ export function SiteFooter() {
           <div className="space-y-3">
             <div className="flex items-center gap-2.5">
               <span className="relative h-12 w-12 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-black/10">
-                <Image
-                  src="/lamarewedding_ui.png"
+                <img
+                  src={publicFileUrl("/lamarewedding_ui.png")}
                   alt="Lamare Wedding & Party 로고"
-                  fill
-                  sizes="128px"
-                  quality={95}
-                  className="object-contain p-1"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-contain p-1"
                 />
               </span>
               <div>

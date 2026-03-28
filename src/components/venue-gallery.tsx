@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
+
+import { publicFileUrl } from "@/lib/public-file-url";
 
 type GalleryItem = {
   title: string;
@@ -81,12 +82,12 @@ export function VenueGallery({ items }: Props) {
             aria-label={`${item.title} 크게 보기`}
           >
             <div className="relative aspect-[4/3]">
-              <Image
-                src={item.src}
+              <img
+                src={publicFileUrl(item.src)}
                 alt={item.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 420px"
-                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -116,13 +117,12 @@ export function VenueGallery({ items }: Props) {
           <div className="mx-auto flex h-full w-full max-w-6xl items-center justify-center p-4 sm:p-8">
             <div className="relative w-full overflow-hidden rounded-3xl border border-white/20 bg-black/20">
               <div className="relative aspect-[16/10]">
-                <Image
-                  src={galleryItems[selectedIndex].src}
+                <img
+                  src={publicFileUrl(galleryItems[selectedIndex].src)}
                   alt={galleryItems[selectedIndex].title}
-                  fill
-                  sizes="100vw"
-                  className="object-contain"
-                  priority
+                  decoding="async"
+                  fetchPriority="high"
+                  className="absolute inset-0 h-full w-full object-contain"
                 />
               </div>
             </div>

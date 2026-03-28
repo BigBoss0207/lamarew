@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { Car, ExternalLink, MapPin, Train } from "lucide-react";
 
 import { Container } from "@/components/container";
+import { publicFileUrl } from "@/lib/public-file-url";
 
 export const metadata = {
   title: "Location",
@@ -33,13 +33,12 @@ export default function LocationPage() {
 
         <div className="mt-10 overflow-hidden rounded-3xl border border-[color:var(--color-rose-pink)]/15 bg-[color:var(--color-white)] shadow-sm">
           <div className="relative aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/8]">
-            <Image
-              src="/location.jpg"
+            <img
+              src={publicFileUrl("/location.jpg")}
               alt="라마레 로케이션 전경"
-              fill
-              sizes="100vw"
-              className="object-cover scale-[1.06]"
-              priority
+              decoding="async"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-cover scale-[1.06]"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/15 via-black/0 to-black/5" />
           </div>
@@ -65,14 +64,12 @@ export default function LocationPage() {
                   className="group absolute inset-0"
                   aria-label="네이버 지도에서 열기"
                 >
-                  <Image
-                    src="/naver-map-preview-landscape.png"
+                  <img
+                    src={publicFileUrl("/naver-map-preview-landscape.png")}
                     alt="라마레 위치 지도 미리보기"
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 1200px"
-                    quality={90}
-                    className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.01]"
-                    priority
+                    decoding="async"
+                    fetchPriority="high"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.01]"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-white/45 via-white/0 to-white/10" />
                   <div className="pointer-events-none absolute inset-0 ring-1 ring-black/5" />

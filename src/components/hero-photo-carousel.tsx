@@ -1,8 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+
+import { publicFileUrl } from "@/lib/public-file-url";
 
 type Props = {
   className?: string;
@@ -77,14 +78,12 @@ export function HeroPhotoCarousel({
             exit={{ opacity: 0 }}
             transition={{ duration, ease: "easeOut" }}
           >
-            <Image
-              src={images[index]!.src}
+            <img
+              src={publicFileUrl(images[index]!.src)}
               alt={images[index]!.alt}
-              fill
-              priority={index === 0}
-              sizes={imageSizes}
-              quality={imageQuality}
-              className={["object-cover", imageClassName].filter(Boolean).join(" ")}
+              decoding="async"
+              fetchPriority={index === 0 ? "high" : "auto"}
+              className={["absolute inset-0 h-full w-full object-cover", imageClassName].filter(Boolean).join(" ")}
               style={{ objectPosition: imageObjectPosition, ...imageStyle }}
             />
           </motion.div>

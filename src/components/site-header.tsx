@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -8,6 +7,7 @@ import { Menu, X } from "lucide-react";
 
 import { Container } from "@/components/container";
 import { cn } from "@/lib/cn";
+import { publicFileUrl } from "@/lib/public-file-url";
 
 type NavItem = { href: string; label: string };
 
@@ -65,14 +65,12 @@ export function SiteHeader() {
           aria-label="Lamare 홈"
         >
           <span className="relative h-12 w-12 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
-            <Image
-              src="/lamarewedding_ui.png"
+            <img
+              src={publicFileUrl("/lamarewedding_ui.png")}
               alt="Lamare Wedding & Party 로고"
-              fill
-              sizes="128px"
-              quality={95}
-              className="object-contain p-0.5"
-              priority
+              decoding="async"
+              fetchPriority="high"
+              className="absolute inset-0 h-full w-full object-contain p-0.5"
             />
           </span>
           <span className="flex flex-col leading-none">

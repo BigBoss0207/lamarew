@@ -1,6 +1,7 @@
 import { Container } from "@/components/container";
 import { GalleryCategorized } from "@/components/gallery-categorized";
 import { CEREMONY_GALLERY_FILENAMES } from "@/data/ceremony-gallery-manifest";
+import { publicFileUrl } from "@/lib/public-file-url";
 
 export const runtime = "edge";
 
@@ -24,7 +25,7 @@ type SearchParams = {
 function getCeremonyItems(): GalleryItem[] {
   return CEREMONY_GALLERY_FILENAMES.map((name, i) => ({
     title: `예식 ${String(i + 1).padStart(2, "0")}`,
-    src: `/${name}`,
+    src: publicFileUrl(name),
   }));
 }
 

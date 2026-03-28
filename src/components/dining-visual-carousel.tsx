@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+
+import { publicFileUrl } from "@/lib/public-file-url";
 
 type Slide = {
   src: string;
@@ -60,15 +61,13 @@ export function DiningVisualCarousel({
   return (
     <div className="overflow-hidden rounded-3xl border border-[color:var(--color-rose-pink)]/15 bg-[color:var(--color-white)] shadow-sm lg:min-h-[520px]">
       <div className="relative aspect-[4/3]">
-        <Image
+        <img
           key={activeSlide.src}
-          src={activeSlide.src}
+          src={publicFileUrl(activeSlide.src)}
           alt={activeSlide.alt}
-          fill
-          sizes="(max-width: 1024px) 100vw, 900px"
-          quality={95}
-          className="object-cover"
-          priority={index === 0}
+          decoding="async"
+          fetchPriority={index === 0 ? "high" : "auto"}
+          className="absolute inset-0 h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
         <div className="absolute left-4 top-4 rounded-full bg-white/85 px-3 py-1 text-[10px] tracking-[0.22em] text-[color:var(--color-foreground)]">
