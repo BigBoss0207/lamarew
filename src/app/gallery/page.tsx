@@ -22,11 +22,19 @@ type SearchParams = {
   dining?: string;
 };
 
+function weddingNumberFromManifestName(name: string): number {
+  const m = name.match(/wedding(\d+)\./i);
+  return m ? Number(m[1]) : 0;
+}
+
 function getCeremonyItems(): GalleryItem[] {
-  return CEREMONY_GALLERY_FILENAMES.map((name, i) => ({
-    title: `예식 ${String(i + 1).padStart(2, "0")}`,
-    src: publicFileUrl(name),
-  }));
+  return CEREMONY_GALLERY_FILENAMES.map((name) => {
+    const n = weddingNumberFromManifestName(name);
+    return {
+      title: `예식 ${String(n).padStart(2, "0")}`,
+      src: publicFileUrl(name),
+    };
+  });
 }
 
 export default async function GalleryPage({

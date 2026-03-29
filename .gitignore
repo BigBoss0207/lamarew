@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# HEIC→JPEG 빌드 산출물 (배포 시마다 재생성)
+public/wedding-web/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

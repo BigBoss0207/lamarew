@@ -1,49 +1,62 @@
-import { mkdirSync, readdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, "..");
 const publicDir = path.join(root, "public");
+const weddingWebDir = path.join(publicDir, "wedding-web");
 const outDir = path.join(root, "src", "data");
 const outFile = path.join(outDir, "ceremony-gallery-manifest.ts");
 
-/** wedding1.JPG 등 파일명에서 순번 추출 */
-function weddingIndex(name) {
-  const m = name.match(/^wedding(\d+)\./i);
+function weddingIndexFromFilename(name) {
+  const m = name.match(/wedding(\d+)\./i);
   return m ? Number(m[1]) : Number.POSITIVE_INFINITY;
 }
 
-/** 같은 번호에 여러 확장자가 있으면 웹 호환성이 좋은 순으로 하나만 씀 */
-function formatPriority(name) {
-  const n = name.toLowerCase();
-  if (/\.(jpe?g)$/.test(n)) return 0;
-  if (/\.png$/.test(n)) return 1;
-  if (/\.webp$/.test(n)) return 2;
-  if (/\.gif$/.test(n)) return 3;
-  if (/\.heic$/.test(n)) return 4;
-  return 99;
+/** public 루트 또는 wedding-web 기준 상대 경로 */
+function resolveWeddingAsset(n, rootNames, webNames) {
+  const jpgUpper = `wedding${n}.JPG`;
+  const jpgLower = `wedding${n}.jpg`;
+  const jpegLower = `wedding${n}.jpeg`;
+  const jpegUpper = `wedding${n}.JPEG`;
+  const png = `wedding${n}.png`;
+  const webp = `wedding${n}.webp`;
+  if (rootNames.has(jpgUpper)) return jpgUpper;
+  if (rootNames.has(jpgLower)) return jpgLower;
+  if (rootNames.has(jpegLower)) return jpegLower;
+  if (rootNames.has(jpegUpper)) return jpegUpper;
+  if (rootNames.has(png)) return png;
+  if (rootNames.has(webp)) return webp;
+  const webJpg = `wedding${n}.jpg`;
+  if (webNames.has(webJpg)) return `wedding-web/${webJpg}`;
+  return null;
 }
 
 let files = [];
 try {
-  const names = readdirSync(publicDir);
-  const extOk = /\.(jpe?g|png|webp|gif|heic)$/i;
-  const candidates = names.filter(
-    (name) => /^wedding\d+\./i.test(name) && extOk.test(name),
-  );
-  candidates.sort((a, b) => {
-    const ia = weddingIndex(a);
-    const ib = weddingIndex(b);
-    if (ia !== ib) return ia - ib;
-    return formatPriority(a) - formatPriority(b);
-  });
-  const seen = new Set();
-  for (const name of candidates) {
-    const i = weddingIndex(name);
-    if (seen.has(i)) continue;
-    seen.add(i);
-    files.push(name);
+  const rootNames = new Set(readdirSync(publicDir));
+  const webNames = existsSync(weddingWebDir)
+    ? new Set(readdirSync(weddingWebDir))
+    : new Set();
+
+  const indices = new Set();
+  for (const name of rootNames) {
+    if (!/^wedding\d+\./i.test(name)) continue;
+    if (/\.heic$/i.test(name)) continue;
+    indices.add(weddingIndexFromFilename(name));
+  }
+  for (const name of webNames) {
+    if (/^wedding\d+\./i.test(name)) {
+      indices.add(weddingIndexFromFilename(name));
+    }
+  }
+
+  const sortedIndices = [...indices].sort((a, b) => a - b);
+
+  for (const n of sortedIndices) {
+    const rel = resolveWeddingAsset(n, rootNames, webNames);
+    if (rel) files.push(rel);
   }
 } catch {
   files = [];
@@ -62,4 +75,11 @@ export const CEREMONY_GALLERY_FILENAMES = ${body};
 `;
 
 writeFileSync(outFile, content, "utf8");
+const webRefs = files.filter((f) => f.startsWith("wedding-web/"));
+if (webRefs.length > 0) {
+  console.warn(
+    `[generate-ceremony-manifest] 경고: wedding-web 경로 ${webRefs.length}개 — 이 폴더는 .gitignore라 배포에 빠질 수 있습니다. ` +
+      "promote-wedding-web-to-root.mjs 실행 후 public 루트 JPG를 커밋하세요.",
+  );
+}
 console.log(`[generate-ceremony-manifest] wrote ${files.length} entries → ${path.relative(root, outFile)}`);
